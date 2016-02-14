@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""config.py.default: default config file."""
+
+
+class BaseConfig():
+    """Base Flask config variabels."""
+
+    DEBUG = False
+    MEDIA_DIR = 'DIRCTORY PATH'
+
+
+class Test(BaseConfig):
+    """Test Flask config variabels."""
+
+    DEBUG = True
+    TESTING = True
+
+
+class Development(BaseConfig):
+    """Development Flask config variabels."""
+
+    DEBUG = True
+
+
+class Production(BaseConfig):
+    """Production Flask config variabels."""
+
+    DEBUG = False
