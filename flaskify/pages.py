@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 
 from .models.library import Library
 
@@ -6,6 +6,11 @@ pages = Blueprint(
     'pages', __name__,
     template_folder='templates'
 )
+
+
+@pages.route('/')
+def index():
+    return render_template('index.html')
 
 
 @pages.route("/songs")

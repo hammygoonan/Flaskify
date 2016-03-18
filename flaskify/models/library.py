@@ -54,10 +54,11 @@ class Library():
         """Loop over files and create array of `Song` objects."""
         songs = []
         for song in files:
-            songs.append(
-                Song(song, os.path.join(path, song), album=album,
-                     artist=artist)
-            )
+            if song[-4:] in ['.mp3', '.ogg']:
+                songs.append(
+                    Song(song, os.path.join(path, song), album=album,
+                         artist=artist)
+                )
         self.songs += songs
         return songs
 

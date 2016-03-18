@@ -23,9 +23,10 @@ class Song():
     def get_metadata(self):
         """Get file meta data."""
         audio = MP3(self.path)
-
+        return audio
 
     def serialise(self):
+        """Return serialised data."""
         serial = self.__dict__
         serial['album'] = self.album.name
         serial['artist'] = self.artist.name

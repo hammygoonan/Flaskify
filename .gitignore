@@ -1,10 +1,9 @@
 # app specific
 config.py
-*.css
 robots.txt
 .sass-cache
-config.rb
 coverage
+static/music
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
