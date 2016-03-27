@@ -21,3 +21,9 @@ This project isn't even Alpha yet so it's futile trying to use it.
 * Be able to edit song metadata
 * Cover art
 * Be able to play music on server (ie a Raspberry Pi)
+
+## Configuration
+
+To run the program you need to specify a `MEDIA_DIR` variable. This should be a full path string to a folder in your static directory (ie '/home/example/www/flaskify/static/music').
+
+We recommend creating a system link from a Music directory elsewhere.

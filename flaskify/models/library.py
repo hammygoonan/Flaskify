@@ -23,12 +23,21 @@ class Library():
     def get_library(self):
         """Walk file system checking for audio files."""
         for path, directories, files in os.walk(self.media_dir):
-            path_bits = path.split('/')
             if self.ignore_directory(path, directories, files):
-                artist = self.get_artist(path_bits[-2])
-                album = self.get_album(path_bits[-1], artist)
-                songs = self.get_songs(files, path, artist, album)
-                album.songs = songs
+                songs = self.get_songs(files, path)
+                for song in songs:
+                    artist_list = []
+                    for artist in song.artist:
+                        artist_list.append(self.get_artist(song.artist))
+                    song.artist = artist_list
+
+                    artist_list = []
+                    for artist in song.album_artist:
+                        artist_list.append(self.get_artist(song.album_artist))
+                    song.album_artist = artist_list
+
+                    album = self.get_album(song.album, song.album_artist)
+                    album.songs.append(song)
 
     def get_artist(self, artist_name):
         """Check it see if artist exists, append to list then return artist."""
@@ -50,14 +59,13 @@ class Library():
         else:
             return album[0]
 
-    def get_songs(self, files, path, artist, album):
+    def get_songs(self, files, path):
         """Loop over files and create array of `Song` objects."""
         songs = []
         for song in files:
-            if song[-4:] in ['.mp3', '.ogg']:
+            if song[-4:] in ['.mp3', '.ogg', '.m4a', 'flac']:
                 songs.append(
-                    Song(song, os.path.join(path, song), album=album,
-                         artist=artist)
+                    Song(os.path.join(path, song))
                 )
         self.songs += songs
         return songs
@@ -70,7 +78,7 @@ class Library():
             return False
 
         songs = [song for song in files if song[-4:] in
-                 ['.mp3', '.m4a', 'flac', '.ogg']]
+                 ['.mp3', '.ogg', '.m4a', 'flac']]
         if not songs:
             return False
         return True

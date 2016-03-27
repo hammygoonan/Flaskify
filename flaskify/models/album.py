@@ -12,9 +12,13 @@ class Album():
         self.songs = []
 
     def serialise(self):
+        """Serialise data for JSON.
+
+        :return: Dict
+        """
         serial = {
             'name': self.name,
-            'artist': self.artist.name,
+            'artist': [artist.name for artist in self.artist],
             'songs': []
         }
         for song in self.songs:
