@@ -68,7 +68,21 @@ class Song():
 
         Tag: APIC
         """
-        return self.get_meta_text(mp3='APIC', mp4='covr')
+
+        if self.file_type == 'mp3':
+            field = self.meta.tags.get('APIC:')
+            # print(field)
+            # if field:
+            #     return field.data
+
+        if self.file_type == 'mp4':
+            # MP4Cover()
+            field = self.meta.tags.get('covr')
+            print(field)
+            # if field:
+            #     return field.covr
+
+        return None
 
     def get_track_album(self, album=None):
         """Get album name.
@@ -79,7 +93,9 @@ class Song():
             return album
         album = self.get_meta_text(mp3='TALB', mp4='soal', flac='album')
         if album is None:
-            return [self.path.split('/')[-2]]
+            return self.path.split('/')[-2]
+        if isinstance(album, list):
+            return album[0]
         return album
 
     def get_album_name(self):
@@ -87,13 +103,9 @@ class Song():
 
         :return: String, artist name
         """
-        album_name = []
-        for album in self.album:
-            if isinstance(album, Album):
-                album_name.append(self.album.name)
-            else:
-                album_name.append(self.album)
-        return album_name
+        if isinstance(self.album, Album):
+            return self.album.name
+        return self.album
 
     def get_track_style(self, track):
         """Get track style.
@@ -119,7 +131,7 @@ class Song():
 
         year = self.get_meta_text(mp3='TDRC')
         if year:
-            return str(year)
+            return str(year[0])
         return year
 
     def get_track_release_date(self):
@@ -145,8 +157,8 @@ class Song():
             return title
         title = self.get_meta_text(mp3='TIT2', mp4='sonm', flac='title')
         if title is None:
-            return [self.path.split('/')[-1]]
-        return title
+            return self.path.split('/')[-1]
+        return title[0]
 
     def get_track_publisher(self, track):
         """Get track Title.
@@ -164,13 +176,18 @@ class Song():
             return track_number
         track_number = self.get_meta_text(mp3='TRCK', mp4='trkn',
                                           flac='tracknumber')
-        if self.file_type == 'mp4':
-            track_number = track_number[0][0]
         if track_number is None:
             track_name = self.path.split('/')[-1]
             #: todo with regex
-            return [track_name[:2]]
-        return track_number
+            return track_name[:2]
+
+        if self.file_type == 'mp4':
+            track_number = track_number[0][0]
+        if '/' in track_number[0]:
+            track_number = track_number[0].split('/')[0]
+        if isinstance(track_number, list):
+            track_number = track_number[0]
+        return int(track_number)
 
     # def get_comment(self, tag):
     #     """Get track comment.
