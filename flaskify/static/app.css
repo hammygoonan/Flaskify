@@ -32,3 +32,10 @@ audio{
     overflow-y: auto;
     margin: 0;
 }
+.album {
+    background-color: #ccc;
+    height: 45px;   
+}
+.album:nth-child(odd) {
+    background-color: white;
+}

@@ -1,16 +1,22 @@
 """Song Model."""
 
+import datetime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import event
 from mutagen.mp3 import MP3
 from mutagen.oggvorbis import OggVorbis
 from mutagen.flac import FLAC
 from mutagen.mp4 import MP4
 
+from flaskify import db
 from .album import Album
 from .artist import Artist
 
 
-class Song():
+class Song(SQLAlchemy):
     """Song Model."""
+
+    id = db.Column(db.Integer, primary_key=True)
 
     def __init__(self, path, **kwargs):
         """Initialise model."""
@@ -20,9 +26,6 @@ class Song():
         self.path_to_static = path.split('/flaskify/flaskify')[1]
         self.meta = self.get_meta()
         self.title = self.get_track_title(kwargs.get('title'))
-        self.album = self.get_track_album(kwargs.get('album'))
-        self.artist = self.get_track_artist(kwargs.get('artist'))
-        self.album_artist = self.get_album_artist(kwargs.get('album_artist'))
         self.track_no = self.get_track_number(kwargs.get('track_no'))
         self.album_pic = self.get_album_pic()
         # self.length = kwargs.get('length')
@@ -41,6 +44,11 @@ class Song():
                           'albumartist', 'discnumber', 'genre', 'date',
                           'album', 'comment', 'totaldiscs', 'title',
                           'performer']
+        self.hash = kwargs.get('hash')
+        # self.album = self.get_track_album(kwargs.get('album'))
+        # self.artist = self.get_track_artist(kwargs.get('artist'))
+        # self.album_artist = self.get_album_artist(kwargs.get('album_artist'))
+        self.last_updated = datetime.datetime.utcnow()
 
     def get_file_type(self):
         """Return file type.
@@ -312,3 +320,8 @@ class Song():
         serial['artist'] = self.get_artist_name()
         serial['album_artist'] = self.get_album_artist_name()
         return serial
+
+
+@event.listens_for(Song, 'before_update')
+def before_update_listener(mapper, connection, target):
+    target.last_updated = datetime.datetime.utcnow()

@@ -13,7 +13,8 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <ul id="albums" class="col-xs-3 list-group list-unstyled"></ul>
+                <div id="app" class="col-xs-12"></div>
+                <!-- <ul id="albums" class="col-xs-3 list-group list-unstyled"></ul>
                 <div class="col-xs-9" id="right">
                     <div class="playlist-frame">
                         <ul class="list-group list-unstyled" id="playlist">
@@ -22,10 +23,9 @@
                     <audio id="player" preload autobuffer autoplay controls>
                         Your browser does not support the <code>audio</code> element.
                     </audio>
-                </div>
+                </div> -->
             </div>
         </div>
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script src="{{ url_for('static', filename='dist/index.js') }}"></script>
     </body>
 </html>

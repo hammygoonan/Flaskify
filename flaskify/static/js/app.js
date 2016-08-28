@@ -1,94 +1,52 @@
-(function($){
-    var player = document.getElementById('player');
-    var album_list = document.getElementById('albums');
-    var playlist_ui = document.getElementById('playlist');
-    var albums;
-    var track_number;
-    var playlist;
-    var now_playing;
+let React = require('react');
+let ReactDOM = require('react-dom');
+let axios = require('axios');
 
-    document.onkeyup = function(e){
-        if(e.keyCode == 32){
-            if(player.paused && player.src){
-                player.play();
-            }
-            else if(player.src){
-                player.pause();
-            }
-            return false;
+
+let Albums = React.createClass({
+
+    getInitialState: function() {
+        return {
+            albums: []
         }
-    };
+    },
 
-    document.onkeydown = function(e){
-        if(e.keyCode == 32){
-            return false;
-        }
-    };
-
-    function req_listener(data) {
-        albums = data.album;
-        $(albums).each(function(idx){
-            if(this.songs.length > 0){
-                var li = $('<li />');
-                var a = $('<a />');
-                a.attr('href', '#');
-                a.data('id', idx);
-                a.addClass('list-group-item')
-                a.click(play_album)
-                a.html('<strong>' + this.artist + '</strong><br />' + this.name)
-                li.append(a);
-                $(album_list).append(li);
-            }
-        });
-    }
-
-    function play_album(){
-        $('#albums .active').removeClass('active')
-        $(this).addClass('active');
-        playlist = albums[$(this).data('id')].songs;
-        create_playlist();
-        return false;
-    }
-
-    function create_playlist(){
-        $(playlist_ui).html('');
-
-        playlist.map(function(obj, idx){
-            // console.log(idx);
-            var playlist_item = $('<li />');
-            playlist_item.html(
-                '<strong>' + obj.title + '</strong></br />' +
-                obj.artist + '<br />' +
-                obj.album
-            )
-            playlist_item.data('id', idx)
-            playlist_item.addClass('list-group-item')
-            playlist_item.on('click', function(){
-                if($(this).hasClass('active')){
-                    return
-                }
-                $('#playlist .active').removeClass('active')
-                $(this).addClass('active')
-                track_number = idx;
-                now_playing = playlist[track_number];
-                $(player).attr('src', now_playing.path_to_static);
-                play_next();
+    componentDidMount: function() {
+        this.serverRequest = axios.get('/albums').then(function(result) {
+            this.setState({
+                albums: result.data.album
             });
-            $(playlist_ui).append(playlist_item)
+        }.bind(this));
+    },
+
+    componentWillUnmount: function() {
+        this.serverRequest.abort();
+    },
+
+    render: function(){
+        var albums = this.state.albums.map(function(album, idx){
+            return (<div className='col-xs-2 album' key={idx}>{album.name}</div>);
         })
+        return (
+            <div>{albums}</div>
+        );
     }
+});
 
-    function play_next(){
-        setInterval(function(){
-            if(player.ended){
-                track_number++;
-                var old = $('#playlist .active').removeClass('active');
-                old.next().addClass('active')
-                now_playing = playlist[track_number];
-                player.src = now_playing.path_to_static
-            }
-        }, 500);
+
+let App = React.createClass({
+    render: function(){
+        return (
+            <div>
+                <h1>Flasify FTW!</h1>
+                <Albums />
+            </div>
+        );
     }
+});
 
-    $.get('/albums', req_listener);
-})(jQuery);
+
+ReactDOM.render(
+    <App />,
+    document.getElementById('app')
+);

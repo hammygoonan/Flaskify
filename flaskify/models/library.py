@@ -1,9 +1,10 @@
 """Application file."""
 
-
 import os
-
+from sqlalchemy import event
 from flask import current_app
+
+from flaskify import db
 from .artist import Artist
 from .album import Album
 from .song import Song
@@ -11,6 +12,8 @@ from .song import Song
 
 class Library():
     """A master class that scans hard drive and creates library object."""
+
+    id = db.Column(db.Integer, primary_key=True)
 
     def __init__(self):
         """Initialise."""
@@ -38,6 +41,9 @@ class Library():
 
                     album = self.get_album(song.album, song.album_artist)
                     album.songs.append(song)
+
+                    db.session.add(album)
+                    db.session.commit()
 
     def get_artist(self, artist_name):
         """Check it see if artist exists, append to list then return artist."""
@@ -82,3 +88,8 @@ class Library():
         if not songs:
             return False
         return True
+
+
+@event.listens_for(Library, 'before_update')
+def before_update_listener(mapper, connection, target):
+    target.last_updated = datetime.datetime.utcnow()
