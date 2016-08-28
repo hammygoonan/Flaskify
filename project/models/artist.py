@@ -1,16 +1,17 @@
 """Artist Model."""
 
 import datetime
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 
-from flaskify import db
+from project import db
 
 
-class Artist(SQLAlchemy):
+class Artist(db.Model):
     """Artist Model."""
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    last_updated = db.Column(db.DateTime)
 
     def __init__(self, name):
         """Initialise Model."""
@@ -18,7 +19,7 @@ class Artist(SQLAlchemy):
         self.last_updated = datetime.datetime.utcnow()
 
     def serialise(self):
-        return self.__dict__
+        return {'name': self.name}
 
 
 @event.listens_for(Artist, 'before_update')

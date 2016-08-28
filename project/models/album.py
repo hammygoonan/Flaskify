@@ -1,13 +1,12 @@
 """Album Model."""
 
 import datetime
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 
-from flaskify import db
+from project import db
 
 
-class Album(SQLAlchemy):
+class Album(db.Model):
     """Album Model."""
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,11 +14,10 @@ class Album(SQLAlchemy):
     last_updated = db.Column(db.DateTime)
     # album_artist
 
-
-    def __init__(self, name, artist):
+    def __init__(self, name, album_artist):
         """Initialise."""
         self.name = name
-        self.artist = artist
+        self.album_artist = album_artist
         self.last_updated = datetime.datetime.utcnow()
 
     def serialise(self):

@@ -4,7 +4,7 @@ import os
 from sqlalchemy import event
 from flask import current_app
 
-from flaskify import db
+from project import db
 from .artist import Artist
 from .album import Album
 from .song import Song

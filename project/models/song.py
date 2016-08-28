@@ -8,15 +8,27 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.flac import FLAC
 from mutagen.mp4 import MP4
 
-from flaskify import db
+from project import db
 from .album import Album
 from .artist import Artist
 
 
-class Song(SQLAlchemy):
+class Song(db.Model):
     """Song Model."""
 
     id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(255))
+    file_type = db.Column(db.String(10))
+    path_to_static = db.Column(db.String(255))
+    title = db.Column(db.String(255))
+    track_no = db.Column(db.Integer)
+    album_pic = db.Column(db.Text())
+    year = db.Column(db.Integer)
+    hash = db.Column(db.Text())
+    last_updated = db.Column(db.DateTime)
+
+    album
+    artists
 
     def __init__(self, path, **kwargs):
         """Initialise model."""
