@@ -9,6 +9,8 @@ from project import db
 class Artist(db.Model):
     """Artist Model."""
 
+    __tablename__ = 'artists'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     last_updated = db.Column(db.DateTime)

@@ -9,65 +9,65 @@ class ArtistTestCase(BaseTestCase):
     """Artist Test Case."""
     def test_can_create_artist(self):
         """Test can create Artist."""
-        album = Artist('Michael Jackson')
-        db.session.add(album)
+        artist = Artist('Michael Jackson')
+        db.session.add(artist)
         db.session.commit()
 
-        assert album in db.session
+        assert artist in db.session
 
     def test_can_read_artist(self):
         """Test can read Artist."""
-        album = Artist('Michael Jackson')
-        db.session.add(album)
+        artist = Artist('Michael Jackson')
+        db.session.add(artist)
         db.session.commit()
 
-        album_query = Artist.query.filter_by(name='Michael Jackson').first()
-        self.assertEqual('Michael Jackson', album_query.name)
+        artist_query = Artist.query.filter_by(name='Michael Jackson').first()
+        self.assertEqual('Michael Jackson', artist_query.name)
 
     def test_can_update_artist(self):
         """Test can update Artist."""
-        album = Artist('Michael Jackson')
-        db.session.add(album)
+        artist = Artist('Michael Jackson')
+        db.session.add(artist)
         db.session.commit()
 
-        album = Artist.query.filter_by(name='Michael Jackson').first()
-        album.name = "Phil Collins"
-        db.session.add(album)
+        artist = Artist.query.filter_by(name='Michael Jackson').first()
+        artist.name = "Phil Collins"
+        db.session.add(artist)
         db.session.commit()
 
-        album = Artist.query.filter_by(name='Phil Collins').first()
-        self.assertEqual('Phil Collins', album.name)
+        artist = Artist.query.filter_by(name='Phil Collins').first()
+        self.assertEqual('Phil Collins', artist.name)
 
-        album = Artist.query.filter_by(name='Michael Jackson').first()
-        self.assertIsNone(album)
+        artist = Artist.query.filter_by(name='Michael Jackson').first()
+        self.assertIsNone(artist)
 
     def test_date_changed_after_update(self):
         """Test that the `last_updated` field is updated on save."""
-        album = Artist('Michael Jackson')
-        db.session.add(album)
+        artist = Artist('Michael Jackson')
+        db.session.add(artist)
         db.session.commit()
-        created = album.last_updated
+        created = artist.last_updated
 
         sleep(1)
-        album.name = "Phil Collins"
+        artist.name = "Phil Collins"
         db.session.commit()
-        updated = album.last_updated
+        updated = artist.last_updated
         self.assertNotEqual(created, updated)
 
     def test_can_delete_artist(self):
         """Test can delete Artist."""
-        album = Artist('Michael Jackson')
-        db.session.add(album)
+        artist = Artist('Michael Jackson')
+        db.session.add(artist)
         db.session.commit()
 
-        album = Artist.query.filter_by(name='Michael Jackson').first()
-        db.session.delete(album)
+        artist = Artist.query.filter_by(name='Michael Jackson').first()
+        db.session.delete(artist)
         db.session.commit()
 
-        album = Artist.query.filter_by(name='Michael Jackson').first()
-        self.assertIsNone(album)
+        artist = Artist.query.filter_by(name='Michael Jackson').first()
+        self.assertIsNone(artist)
 
     def test_artist_serialise(self):
         """Test Artist serialise method."""
-        album = Artist('Michael Jackson')
-        self.assertIsInstance(album.serialise(), dict)
+        artist = Artist('Michael Jackson')
+        self.assertIsInstance(artist.serialise(), dict)

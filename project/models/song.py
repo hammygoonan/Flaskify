@@ -1,7 +1,6 @@
 """Song Model."""
 
 import datetime
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 from mutagen.mp3 import MP3
 from mutagen.oggvorbis import OggVorbis
@@ -12,30 +11,40 @@ from project import db
 from .album import Album
 from .artist import Artist
 
+artists = db.Table(
+    'song_artists',
+    db.Column('song_id', db.Integer, db.ForeignKey('songs.id')),
+    db.Column('artist_id', db.Integer, db.ForeignKey('artists.id'))
+)
+
 
 class Song(db.Model):
     """Song Model."""
+
+    __tablename__ = 'songs'
 
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(255))
     file_type = db.Column(db.String(10))
     path_to_static = db.Column(db.String(255))
     title = db.Column(db.String(255))
-    track_no = db.Column(db.Integer)
+    # track_no = db.Column(db.Integer)
     album_pic = db.Column(db.Text())
     year = db.Column(db.Integer)
     hash = db.Column(db.Text())
     last_updated = db.Column(db.DateTime)
 
-    album
-    artists
+    artists = db.relationship('Artist', secondary=artists,
+                              backref='albums')
+
+    # albums = db.relationship('AlbumSong', backref='song')
 
     def __init__(self, path, **kwargs):
         """Initialise model."""
         self.id = id(self)
         self.path = path
         self.file_type = self.get_file_type()
-        self.path_to_static = path.split('/flaskify/flaskify')[1]
+        self.path_to_static = path.split('/flaskify/project')[1]
         self.meta = self.get_meta()
         self.title = self.get_track_title(kwargs.get('title'))
         self.track_no = self.get_track_number(kwargs.get('track_no'))
