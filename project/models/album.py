@@ -24,7 +24,7 @@ class Album(db.Model):
     last_updated = db.Column(db.DateTime)
 
     album_artists = db.relationship('Artist', secondary='album_artists',
-                                    backref='albums')
+                                    backref='artist_albums')
 
     # songs = db.relationship('AlbumSong', backref='album')
 

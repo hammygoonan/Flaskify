@@ -23,6 +23,13 @@ class Artist(db.Model):
     def serialise(self):
         return {'name': self.name}
 
+    @staticmethod
+    def get_or_create(name):
+        artist = Artist.query.filter_by(name=name).first()
+        if artist is None:
+            artist = Artist(name)
+        return artist
+
 
 @event.listens_for(Artist, 'before_update')
 def before_update_listener(mapper, connection, target):

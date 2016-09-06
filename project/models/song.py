@@ -1,7 +1,9 @@
 """Song Model."""
 
 import datetime
+from os import path
 from sqlalchemy import event
+from flask import current_app, url_for
 from mutagen.mp3 import MP3
 from mutagen.oggvorbis import OggVorbis
 from mutagen.flac import FLAC
@@ -26,16 +28,15 @@ class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(255))
     file_type = db.Column(db.String(10))
-    path_to_static = db.Column(db.String(255))
     title = db.Column(db.String(255))
-    # track_no = db.Column(db.Integer)
     album_pic = db.Column(db.Text())
     year = db.Column(db.Integer)
     hash = db.Column(db.Text())
     last_updated = db.Column(db.DateTime)
-
     artists = db.relationship('Artist', secondary=artists,
-                              backref='albums')
+                              backref='songs')
+
+    file_types = ['mp3', 'mp4', 'm4a', 'flac']
 
     # albums = db.relationship('AlbumSong', backref='song')
 
@@ -44,11 +45,11 @@ class Song(db.Model):
         self.id = id(self)
         self.path = path
         self.file_type = self.get_file_type()
-        self.path_to_static = path.split('/flaskify/project')[1]
+        self.url_for = self.get_url_for()
         self.meta = self.get_meta()
         self.title = self.get_track_title(kwargs.get('title'))
         self.track_no = self.get_track_number(kwargs.get('track_no'))
-        self.album_pic = self.get_album_pic()
+        # self.album_pic = self.get_album_pic()
         # self.length = kwargs.get('length')
         # self.size = kwargs.get('size')
         self.year = self.get_track_year(kwargs.get('year'))
@@ -65,11 +66,11 @@ class Song(db.Model):
                           'albumartist', 'discnumber', 'genre', 'date',
                           'album', 'comment', 'totaldiscs', 'title',
                           'performer']
-        self.hash = kwargs.get('hash')
-        # self.album = self.get_track_album(kwargs.get('album'))
-        # self.artist = self.get_track_artist(kwargs.get('artist'))
+        # self.hash = self.get_hash('hash')
+        self.artists = self.get_artists(kwargs.get('artists'))
+        self.album = self.get_track_album(kwargs.get('album'))
         # self.album_artist = self.get_album_artist(kwargs.get('album_artist'))
-        self.last_updated = datetime.datetime.utcnow()
+        # self.last_updated = datetime.datetime.utcnow()
 
     def get_file_type(self):
         """Return file type.
@@ -79,18 +80,36 @@ class Song(db.Model):
         f_type = self.path.split('.')[-1]
         if f_type == 'm4a' or f_type == 'm4b':
             f_type == 'mp4'
+        if f_type not in self.file_types:
+            raise ValueError('Unsupported file type.')
         return f_type
+
+    def get_url_for(self):
+        """Return url for song.
+
+        :return: Strong, url.
+        """
+        media_dir = current_app.config['MEDIA_DIR']
+        static_folder = current_app.static_folder
+        static_path = media_dir.replace(static_folder, '')
+        return url_for('static', filename='{}/{}'.format(
+            static_path[1:], self.path)
+        )
 
     def get_meta(self):
         """Get file meta data."""
         if self.file_type == 'mp3':
-            return self.get_mp3(self.path)
+            return self.get_mp3(path.join(current_app.config['MEDIA_DIR'],
+                                self.path))
         if self.file_type == 'ogg':
-            return self.get_ogg(self.path)
+            return self.get_ogg(path.join(current_app.config['MEDIA_DIR'],
+                                self.path))
         if self.file_type == 'flac':
-            return self.get_flac(self.path)
+            return self.get_flac(path.join(current_app.config['MEDIA_DIR'],
+                                 self.path))
         if self.file_type == 'm4a' or self.file_type == 'mp4':
-            return self.get_mp4(self.path)
+            return self.get_mp4(path.join(current_app.config['MEDIA_DIR'],
+                                self.path))
 
     def get_album_pic(self):
         """Get album Artwork.
@@ -107,7 +126,6 @@ class Song(db.Model):
         if self.file_type == 'mp4':
             # MP4Cover()
             field = self.meta.tags.get('covr')
-            print(field)
             # if field:
             #     return field.covr
 
@@ -118,13 +136,31 @@ class Song(db.Model):
 
         Tag: TALB
         """
+        if self.album:
+            return self.album
+
         if album:
-            return album
-        album = self.get_meta_text(mp3='TALB', mp4='soal', flac='album')
-        if album is None:
-            return self.path.split('/')[-2]
-        if isinstance(album, list):
-            return album[0]
+            if isinstance(album, Album):
+                return [album]
+            elif isinstance(album, list):
+                pass
+            elif isinstance(album, str):
+                pass
+            else:
+                raise ValueError(
+                    'Album but be a sting, list or `Album` object')
+
+        album_name = self.get_meta_text(mp3='TALB', mp4='soal', flac='album')
+
+        if album_name is None:
+            album_name = self.path.split('/')[-2]
+
+        if isinstance(album_name, list):
+            album_name = album_name[0]
+
+        artist = self.get_artists()
+        Album.query.filter_by(name=album_name)
+
         return album
 
     def get_album_name(self):
@@ -160,7 +196,8 @@ class Song(db.Model):
 
         year = self.get_meta_text(mp3='TDRC')
         if year:
-            return str(year[0])
+            # ID3TimeStamp to string to int
+            return int(str(year[0]))
         return year
 
     def get_track_release_date(self):
@@ -205,17 +242,20 @@ class Song(db.Model):
             return track_number
         track_number = self.get_meta_text(mp3='TRCK', mp4='trkn',
                                           flac='tracknumber')
+
         if track_number is None:
             track_name = self.path.split('/')[-1]
-            #: todo with regex
+            # :todo: with regex
             return track_name[:2]
 
-        if self.file_type == 'mp4':
-            track_number = track_number[0][0]
-        if '/' in track_number[0]:
-            track_number = track_number[0].split('/')[0]
         if isinstance(track_number, list):
-            track_number = track_number[0]
+            if '/' in track_number[0]:
+                track_number = track_number[0].split('/')[0]
+            elif isinstance(track_number[0], tuple):
+                track_number = track_number[0][0]
+            else:
+                track_number = track_number[0]
+
         return int(track_number)
 
     # def get_comment(self, tag):
@@ -225,16 +265,42 @@ class Song(db.Model):
     #     """
     #     return self.get_meta_text(tag)
 
-    def get_track_artist(self, artist=None):
+    def get_artists(self, artists=None):
         """Get song artist."""
-        if artist:
-            return artist
-        artist = self.get_meta_text(mp3='TPE1', mp4='aART', flac='artist')
-        if artist is None:
+        # if no artist set but has metadata
+        if self.artists:
+            return self.artists
+
+        if artists is None:
+            artists = self.get_meta_text(mp3='TPE1', mp4='aART', flac='artist')
+        # if no artist set an no metadata get from file path
+        if artists is None:
             if self.path.split('/')[-3] == 'Music':
-                return [self.path.split('/')[-2]]
-            return [self.path.split('/')[-3]]
-        return artist
+                artist_name = self.path.split('/')[-2]
+            else:
+                artist_name = self.path.split('/')[-2]
+            artists = [Artist.get_or_create(artist_name)]
+        else:
+            # if artists is a list
+            if isinstance(artists, list):
+                artist_obj = []
+                for artist in artists:
+                    if isinstance(artist, Artist):
+                        artist_obj.append(artist)
+                    else:
+                        artist_obj.append(Artist.get_or_create(artist))
+                return artist_obj
+            # if artists is a string
+            if isinstance(artists, str):
+                return [Artist.get_or_create(artists)]
+            # if artists is an object
+            if isinstance(artists, Artist):
+                return [artists]
+        # return empty list if all else fails
+        if artists is None:
+            artists = []
+
+        return artists
 
     def get_artist_name(self):
         """Return artist name as list.
@@ -242,7 +308,7 @@ class Song(db.Model):
         :return: List, artist name
         """
         artist_name = []
-        for artist in self.artist:
+        for artist in self.artists:
             if isinstance(artist, Artist):
                 artist_name.append(artist.name)
             else:
@@ -287,7 +353,7 @@ class Song(db.Model):
             field = self.meta.tags.get(mp3_tag)
             if field:
                 return field.text
-        if self.file_type == 'mp4' and mp4_tag:
+        if (self.file_type == 'mp4' or self.file_type == 'm4a') and mp4_tag:
             field = self.meta.tags.get(mp4_tag)
             if field:
                 return field
