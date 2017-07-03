@@ -1,8 +1,10 @@
-Flask==0.10.1
-Flask-SQLAlchemy==2.1
-Jinja2==2.8
-MarkupSafe==0.23
-SQLAlchemy==1.0.14
-Werkzeug==0.11.3
+click==6.7
+Flask==0.12.2
+Flask-SQLAlchemy==2.2
+Flask-Testing==0.6.2
 itsdangerous==0.24
-mutagen==1.31
+Jinja2==2.9.6
+MarkupSafe==1.0
+mutagen==1.38
+SQLAlchemy==1.1.11
+Werkzeug==0.12.2

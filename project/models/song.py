@@ -17,7 +17,7 @@ artists = db.Table(
     'song_artists',
     db.Column('song_id', db.Integer, db.ForeignKey('songs.id')),
     db.Column('artist_id', db.Integer, db.ForeignKey('artists.id'))
-)
+    )
 
 
 class Song(db.Model):
@@ -45,7 +45,7 @@ class Song(db.Model):
         self.id = id(self)
         self.path = path
         self.file_type = self.get_file_type()
-        self.url_for = self.get_url_for()
+        # self.url_for = self.get_url_for()
         self.meta = self.get_meta()
         self.title = self.get_track_title(kwargs.get('title'))
         self.track_no = self.get_track_number(kwargs.get('track_no'))
@@ -87,7 +87,7 @@ class Song(db.Model):
     def get_url_for(self):
         """Return url for song.
 
-        :return: Strong, url.
+        :return: String, url.
         """
         media_dir = current_app.config['MEDIA_DIR']
         static_folder = current_app.static_folder
@@ -136,8 +136,8 @@ class Song(db.Model):
 
         Tag: TALB
         """
-        if self.album:
-            return self.album
+        if album:
+            return album
 
         if album:
             if isinstance(album, Album):
@@ -197,7 +197,7 @@ class Song(db.Model):
         year = self.get_meta_text(mp3='TDRC')
         if year:
             # ID3TimeStamp to string to int
-            return int(str(year[0]))
+            return int(year[0].year)
         return year
 
     def get_track_release_date(self):

@@ -1,7 +1,6 @@
 """Application file."""
 
 import os
-from sqlalchemy import event
 from flask import current_app
 
 from project import db
@@ -72,7 +71,7 @@ class Library():
             if song[-4:] in ['.mp3', '.ogg', '.m4a', 'flac']:
                 songs.append(
                     Song(os.path.join(path, song))
-                )
+                    )
         self.songs += songs
         return songs
 
@@ -88,8 +87,3 @@ class Library():
         if not songs:
             return False
         return True
-
-
-@event.listens_for(Library, 'before_update')
-def before_update_listener(mapper, connection, target):
-    target.last_updated = datetime.datetime.utcnow()
