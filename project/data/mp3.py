@@ -33,44 +33,25 @@ class Mp3(Track):
     def get_album_artists(self):
         return self.data.get('TPE2')
 
-    # def get_album_title(self):
-    #     pass
-
     def get_album_year(self):
-        return self.data.get('TDRC')
-
-    # def get_url_for(self):
-    #     pass
+        return self.data.get('TDRC').text[0].year
 
     def get_album_pic(self):
         # APIC
         pass
 
     def get_track_album(self):
-        return self.data.get('TALB')
-        # TALB
-        pass
+        return self.data.get('TALB').text[0]
 
-    # def get_album_name(self):
-    #     pass
-
-    def get_track_style(self):
-        # TCON
-        pass
+    def get_track_genre(self):
+        return self.data.get('TCON').text
 
     def get_track_copyright(self):
         # TCOP
         pass
 
-    # def get_track_release_date(self):
-    #     pass
-
-    # def get_track_encoder(self):
-    #     pass
-
     def get_track_publisher(self):
-        # TPUB
-        pass
+        return self.data.get('TPUB').text
 
     def get_track_number(self):
-        return int(self.data.get('TRCK').text)
+        return int(self.data.get('TRCK').text[0])

@@ -28,13 +28,7 @@ class Track():
     def get_album_artists(self):
         pass
 
-    def get_album_title(self):
-        pass
-
     def get_album_year(self):
-        pass
-
-    def get_url_for(self):
         pass
 
     def get_album_pic(self):
@@ -43,19 +37,10 @@ class Track():
     def get_track_album(self):
         pass
 
-    def get_album_name(self):
-        pass
-
-    def get_track_style(self):
+    def get_track_genre(self):
         pass
 
     def get_track_copyright(self):
-        pass
-
-    def get_track_release_date(self):
-        pass
-
-    def get_track_encoder(self):
         pass
 
     def get_track_publisher(self):

@@ -19,12 +19,12 @@ class TrackTests(BaseTestCase):
         self.assertIsInstance(flac, Flac)
 
     def test_factory_returns_m4a_class(self):
-        m4a = Track.get_details('test.m4a')
+        m4a = Track.get_details('Amon Tobin/Dark Jovian/01 Dark Jovian.m4a')
         self.assertIsInstance(m4a, M4a)
 
     def test_factory_returns_mp4_class(self):
-        mp3 = Track.get_details('test.mp4')
-        self.assertIsInstance(mp3, Mp4)
+        mp4 = Track.get_details('Amon Tobin/Dark Jovian/01 Dark Jovian.m4a')
+        self.assertIsInstance(mp4, Mp4)
 
     def test_error_if_filetype_not_supported(self):
         with self.assertRaises(Exception):
