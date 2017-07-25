@@ -6,10 +6,12 @@ from project.data.m4a import M4a
 from project.data.flac import Flac
 
 
-class DataTests(BaseTestCase):
+class TrackTests(BaseTestCase):
 
     def test_factory_returns_mp3_class(self):
-        mp3 = Track.get_details('test.mp3')
+        mp3_file_path = 'DJ Mustard/Ketchup - HotNewHipHop/08. DJ Mustard - LadyKilla Feat. Coc' +\
+                        'c Pistol Cree.mp3'
+        mp3 = Track.get_details(mp3_file_path)
         self.assertIsInstance(mp3, Mp3)
 
     def test_factory_returns_flac_class(self):

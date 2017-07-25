@@ -4,6 +4,7 @@ robots.txt
 .sass-cache
 coverage
 static/music
+project/static/music/
 .python-version
 
 # Byte-compiled / optimized / DLL files

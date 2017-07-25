@@ -1,3 +1,7 @@
+from os import path
+from flask import current_app
+
+
 class Track():
 
     def __init__(self, path):
@@ -11,6 +15,9 @@ class Track():
             if f_type == sub_class.__name__.lower():
                 return sub_class(path)
         raise Exception('This file type is not supported.')
+
+    def get_file_path(self):
+        return path.join(current_app.config['MEDIA_DIR'], self.path)
 
     def get_title(self):
         pass

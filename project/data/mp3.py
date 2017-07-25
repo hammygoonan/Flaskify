@@ -1,26 +1,43 @@
+from mutagen.mp3 import MP3
 from .track import Track
 
 
 class Mp3(Track):
-    """Extract"""
+    """Extract metadata.
+
+    http://help.mp3tag.de/main_tags.html
+    """
+
+    def __init__(self, path):
+        super().__init__(path)
+        self.data = self.get_mp3(self.path)
+
+    def get_mp3(self, path):
+        """Return MP3 object.
+
+        :param path: String, filename relative to MEDIA_DIR.
+        :return: :class:`MP3 <MP3>`
+        """
+        return MP3(self.get_file_path())
+
     def get_title(self):
-        # TIT2
-        pass
+        """Return track title.
+
+        :return: string
+        """
+        return self.data.get('TIT2').text[0]
 
     def get_artists(self):
-        # TPE1
-        pass
+        return self.data.get('TPE1')
 
     def get_album_artists(self):
-        # TPE2
-        pass
+        return self.data.get('TPE2')
 
     # def get_album_title(self):
     #     pass
 
     def get_album_year(self):
-        # TDRC
-        pass
+        return self.data.get('TDRC')
 
     # def get_url_for(self):
     #     pass
@@ -30,6 +47,7 @@ class Mp3(Track):
         pass
 
     def get_track_album(self):
+        return self.data.get('TALB')
         # TALB
         pass
 
@@ -55,5 +73,4 @@ class Mp3(Track):
         pass
 
     def get_track_number(self):
-        # TRCK
-        pass
+        return int(self.data.get('TRCK').text)
