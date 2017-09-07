@@ -19,7 +19,7 @@ class Album(db.Model):
     __tablename__ = 'albums'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
+    title = db.Column(db.String(255))
     year = db.Column(db.Integer())
     last_updated = db.Column(db.DateTime)
 
@@ -30,9 +30,9 @@ class Album(db.Model):
 
     # genre = db.relationship('Genre', secondary=genre, backref='albums')
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, **kwargs):
         """Initialise."""
-        self.name = name
+        self.title = kwargs.get('title')
         self.album_artists = kwargs.get('album_artists', [])
         self.year = kwargs.get('year')
         # self.genre = kwargs.get('genre')
@@ -44,7 +44,7 @@ class Album(db.Model):
         :return: Dict
         """
         serial = {
-            'name': self.name,
+            'title': self.title,
             'album_artists': [artist.name for artist in self.album_artists]
         }
         # for song in self.songs:

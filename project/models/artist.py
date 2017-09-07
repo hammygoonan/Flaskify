@@ -12,12 +12,12 @@ class Artist(db.Model):
     __tablename__ = 'artists'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
+    name = db.Column(db.String(255), nullable=False)
     last_updated = db.Column(db.DateTime)
 
-    def __init__(self, name):
+    def __init__(self, **kwargs):
         """Initialise Model."""
-        self.name = name
+        self.name = kwargs.get('name')
         self.last_updated = datetime.datetime.utcnow()
 
     def serialise(self):

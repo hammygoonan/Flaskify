@@ -76,7 +76,7 @@ class Library():
         return songs
 
     def ignore_directory(self, path, directories, files):
-        """Check if directory shold be scanned. Return boolean."""
+        """Check if directory should be scanned. Return boolean."""
         if directories:
             return False
         if 'iTunes' in path:
