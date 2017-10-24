@@ -7,7 +7,7 @@ m4a_file_path = 'Amon Tobin/Dark Jovian/01 Dark Jovian.m4a'
 def test_get_title():
     """Return MP4 track title."""
     mp4 = Track.get_details(m4a_file_path)
-    assert ['Dark Jovian'] == mp4.get_title()
+    assert 'Dark Jovian' == mp4.get_title()
 
 
 def test_get_artists():
@@ -31,7 +31,7 @@ def test_get_album_year():
 def test_get_track_album():
     """Return MP4 track album title."""
     mp4 = Track.get_details(m4a_file_path)
-    assert ['Dark Jovian'] == mp4.get_track_album()
+    assert 'Dark Jovian' == mp4.get_track_album()
 
 
 def test_get_track_genre():

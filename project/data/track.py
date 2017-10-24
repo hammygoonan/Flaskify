@@ -10,14 +10,16 @@ class Track():
     @classmethod
     def get_details(cls, path):
         f_type = path.split('.')[-1]
-
         for sub_class in cls.__subclasses__():
             if f_type == sub_class.__name__.lower():
                 return sub_class(path)
         raise Exception('This file type is not supported.')
 
     def get_file_path(self):
-        return path.join(current_app.config['MEDIA_DIR'], self.path)
+        if path.isfile(path.join(current_app.config['MUSIC_DIR'], self.path)):
+            return path.join(current_app.config['MUSIC_DIR'], self.path)
+        if path.isfile(self.path):
+            return self.path
 
     def get_title(self):
         pass

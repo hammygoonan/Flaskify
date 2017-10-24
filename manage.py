@@ -29,17 +29,24 @@ def test():
 
 def create_database():
     """Create empty database."""
-    from project.models import album_song, album, library, song  # noqa
+    from project.models import album_song, album, artist, song  # noqa
     app = create_app('config.Development')
     with app.app_context():
         db.create_all()
 
 
-def update_library():
-    from project.models.library import Library
+# def update_library():
+#     from project.models.library import Library
+#     app = create_app('config.Development')
+#     with app.app_context():
+#         Library()
+
+
+def scan_dir():
+    from project.utils.scanner import scan_dir
     app = create_app('config.Development')
     with app.app_context():
-        Library()
+        scan_dir()
 
 
 if __name__ == "__main__":

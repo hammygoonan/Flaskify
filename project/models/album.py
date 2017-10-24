@@ -27,7 +27,6 @@ class Album(db.Model):
                                     backref='artist_albums')
 
     # songs = db.relationship('AlbumSong', backref='album')
-
     # genre = db.relationship('Genre', secondary=genre, backref='albums')
 
     def __init__(self, **kwargs):

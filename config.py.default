@@ -7,7 +7,8 @@ class BaseConfig():
     """Base Flask config variabels."""
 
     DEBUG = False
-    MEDIA_DIR = 'DIRCTORY PATH'
+    MUSIC_DIR = 'DIRCTORY PATH'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class Test(BaseConfig):

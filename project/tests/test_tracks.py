@@ -1,4 +1,6 @@
+import os
 import pytest
+from flask import current_app
 from project.data.track import Track
 from project.data.mp3 import Mp3
 from project.data.mp4 import Mp4
@@ -14,7 +16,8 @@ def test_factory_returns_mp3_class():
 
 
 def test_factory_returns_flac_class():
-    flac = Track.get_details('test.flac')
+    flac_file = 'Animal Collective/Merriweather Post Pavilion/01 - In the Flowers.flac'
+    flac = Track.get_details(flac_file)
     assert isinstance(flac, Flac)
 
 
@@ -25,6 +28,14 @@ def test_factory_returns_m4a_class():
 
 def test_factory_returns_mp4_class():
     mp4 = Track.get_details('Amon Tobin/Dark Jovian/01 Dark Jovian.m4a')
+    assert isinstance(mp4, Mp4)
+
+
+def test_get_path_for_absolute_path(app):
+    """Test correct file is returned if path provided is absolute."""
+    mp4 = Track.get_details(
+        os.path.join(current_app.config['MUSIC_DIR'], 'Amon Tobin/Dark Jovian/01 Dark Jovian.m4a')
+    )
     assert isinstance(mp4, Mp4)
 
 

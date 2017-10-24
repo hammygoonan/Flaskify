@@ -1,5 +1,5 @@
 from mutagen.mp3 import MP3
-from .track import Track
+from project.data.track import Track
 
 
 class Mp3(Track):
@@ -15,7 +15,7 @@ class Mp3(Track):
     def get_mp3(self, path):
         """Return MP3 object.
 
-        :param path: String, filename relative to MEDIA_DIR.
+        :param path: String, filename relative to MUSIC_DIR.
         :return: :class:`MP3 <MP3>`
         """
         return MP3(self.get_file_path())
@@ -25,13 +25,21 @@ class Mp3(Track):
 
         :return: string
         """
-        return self.data.get('TIT2').text[0]
+        title = self.data.get('TIT2')
+        if title:
+            return self.data.get('TIT2').text[0]
+        return ''
 
     def get_artists(self):
-        return self.data.get('TPE1')
+        if self.data.get('TPE1'):
+            return self.data.get('TPE1')
+        return []
 
     def get_album_artists(self):
-        return self.data.get('TPE2')
+        artist = self.data.get('TPE2')
+        if artist:
+            return artist.text
+        return []
 
     def get_album_year(self):
         return self.data.get('TDRC').text[0].year
@@ -41,7 +49,9 @@ class Mp3(Track):
         pass
 
     def get_track_album(self):
-        return self.data.get('TALB').text[0]
+        if self.data.get('TALB'):
+            return self.data.get('TALB').text[0]
+        return None
 
     def get_track_genre(self):
         return self.data.get('TCON').text
@@ -54,4 +64,9 @@ class Mp3(Track):
         return self.data.get('TPUB').text
 
     def get_track_number(self):
-        return int(self.data.get('TRCK').text[0])
+        if self.data.get('TRCK'):
+            track_no = self.data.get('TRCK').text[0]
+            if track_no.isnumeric():
+                return int(track_no)
+            return track_no
+        return None
