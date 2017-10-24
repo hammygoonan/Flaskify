@@ -10,9 +10,9 @@ class Ogg(Track):
 
     def __init__(self, path):
         super().__init__(path)
-        self.data = self.get_flac(self.path)
+        self.data = self.get_ogg(self.path)
 
-    def get_flac(self, path):
+    def get_ogg(self, path):
         """Return MP3 object.
 
         :param path: String, filename relative to MUSIC_DIR.

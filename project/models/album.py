@@ -26,15 +26,11 @@ class Album(db.Model):
     album_artists = db.relationship('Artist', secondary='album_artists',
                                     backref='artist_albums')
 
-    # songs = db.relationship('AlbumSong', backref='album')
-    # genre = db.relationship('Genre', secondary=genre, backref='albums')
-
     def __init__(self, **kwargs):
         """Initialise."""
         self.title = kwargs.get('title')
         self.album_artists = kwargs.get('album_artists', [])
         self.year = kwargs.get('year')
-        # self.genre = kwargs.get('genre')
         self.last_updated = datetime.datetime.utcnow()
 
     def serialise(self):
@@ -46,8 +42,6 @@ class Album(db.Model):
             'title': self.title,
             'album_artists': [artist.name for artist in self.album_artists]
         }
-        # for song in self.songs:
-        #     serial['songs'].append(song.serialise())
         return serial
 
 

@@ -7,11 +7,6 @@ import os
 from flask import current_app
 from project import db
 from project.data.track import Track
-from project.data.mp3 import Mp3
-from project.data.m4a import M4a
-from project.data.mp4 import Mp4
-from project.data.flac import Flac
-from project.data.ogg import Ogg
 from project.models.artist import Artist
 from project.models.album import Album
 from project.models.album_song import AlbumSong
@@ -26,8 +21,8 @@ def scan_dir(directory=None):
 
     for path, directories, files in os.walk(directory):
         if ignore_directory(path, directories, files):
-            for file in files:
-                track = get_track_details(os.path.join(path, file))
+            for f in files:
+                track = get_track_details(os.path.join(path, f))
                 if track:
                     process_track_data(track)
 

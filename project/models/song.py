@@ -24,7 +24,6 @@ class Song(db.Model):
     last_updated = db.Column(db.DateTime)
 
     artists = db.relationship('Artist', secondary=song_artists, backref='songs')
-    # albums = db.relationship('AlbumSong', backref='song')
 
     def __init__(self, **kwargs):
         """Initialise model."""
