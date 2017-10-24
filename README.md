@@ -6,7 +6,7 @@ I should play most formats (mp3, ogg, flac, m4a) and will automatically scan a g
 
 ## Technology
 
-It uses Python 3 and Flask for a backend and AngularJS 2 for the frontend.
+It uses Python 3 and Flask for a backend and VueJS for the frontend.
 
 ## Not even Alpha
 
@@ -27,3 +27,13 @@ This project isn't even Alpha yet so it's futile trying to use it.
 To run the program you need to specify a `MUSIC_DIR` variable. This should be a full path string to a folder in your static directory (ie '/home/example/www/flaskify/static/music').
 
 We recommend creating a system link from a Music directory elsewhere.
+
+
+# TODO:
+- [ ] Improve test coverage of model relationships
+- [ ] API
+- [ ] Better serialisation
+- [ ] Guess song artist and name if no metadata
+- [ ] Cover art
+- [ ] Pagination
+- [ ] Playlists

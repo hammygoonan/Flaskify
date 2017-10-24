@@ -21,7 +21,6 @@ def test_can_create_album_song(db):
     db.session.commit()
 
     album_song = AlbumSong.query.first()
-    print(album_song.album.__dict__)
     assert album_song.song.title == "Ziggy Stardust"
     assert album_song.album.title == "The Rise And Fall Of Ziggy Stardust And The Spiders From " +\
                                      "Mars"

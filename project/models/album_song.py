@@ -10,6 +10,6 @@ class AlbumSong(db.Model):
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'))
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'))
 
-    song = db.relationship('Song', backref='albums')
-    album = db.relationship('Album', backref='songs')
+    song = db.relationship('Song', backref='song_albums')
+    album = db.relationship('Album', backref='album_songs')
     track_no = db.Column('track_no', db.Integer)

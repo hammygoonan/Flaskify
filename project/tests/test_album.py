@@ -1,3 +1,4 @@
+import pytest
 from time import sleep
 
 from project.models.album import Album
@@ -76,3 +77,22 @@ def test_album_serialise(db):
     album = Album(title='Off the Wall', album_artists=[artist])
     assert isinstance(album.serialise(), dict)
     assert isinstance(album.serialise()['album_artists'], list)
+
+
+@pytest.mark.xfail
+def test_album_title_is_required(db):
+    album = Album()
+    db.session.add(album)
+    with pytest.raises(Exception):
+        db.session.commit()
+
+
+def test_can_get_album_songs(test_mp3):
+    album = Album.query.first()
+    for song in album.songs:
+        assert "LadyKilla Feat. Cocc Pistol Cree" == song.title
+        assert 8 == song.track_no
+
+
+def test_can_get_album_artists(db):
+    pass

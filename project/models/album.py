@@ -33,12 +33,22 @@ class Album(db.Model):
         self.year = kwargs.get('year')
         self.last_updated = datetime.datetime.utcnow()
 
+    @property
+    def songs(self):
+        songs = []
+        for album_song in self.album_songs:
+            song = album_song.song
+            song.track_no = album_song.track_no
+            songs.append(song)
+        return songs
+
     def serialise(self):
         """Serialise data for JSON.
 
         :return: Dict
         """
         serial = {
+            'id': self.id,
             'title': self.title,
             'album_artists': [artist.name for artist in self.album_artists]
         }

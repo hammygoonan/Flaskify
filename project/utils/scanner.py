@@ -48,6 +48,7 @@ def get_track_details(path):
     :return: array of `class Track`
     """
     track = None
+    print(Track.get_details(path))
     try:
         track = Track.get_details(path)
     except:
@@ -62,25 +63,27 @@ def process_track_data(track):
     :return: None
     """
     track_name = track.get_title()
-    song = create_song(track_name, track.get_file_path())
-    album_name = track.get_track_album()
-    album = create_album(album_name)
-
-    album_song = AlbumSong()
-    album_song.song = song
-    album_song.album = album
-    album_song.track_no = track.get_track_number()
-    db.session.add(album_song)
-
-    for artist_name in track.get_artists():
-        artist = create_artist(artist_name)
-        song.artists.append(artist)
-
-    for artist_name in track.get_album_artists():
-        artist = create_artist(artist_name)
-        album.album_artists.append(artist)
-
-    db.session.commit()
+    print(track_name)
+    # track_name = track.get_title()
+    # song = create_song(track_name, track.get_file_path())
+    # album_name = track.get_track_album()
+    # album = create_album(album_name)
+    #
+    # album_song = AlbumSong()
+    # album_song.song = song
+    # album_song.album = album
+    # album_song.track_no = track.get_track_number()
+    # db.session.add(album_song)
+    #
+    # for artist_name in track.get_artists():
+    #     artist = create_artist(artist_name)
+    #     song.artists.append(artist)
+    #
+    # for artist_name in track.get_album_artists():
+    #     artist = create_artist(artist_name)
+    #     album.album_artists.append(artist)
+    #
+    # db.session.commit()
 
 
 def create_artist(name):
