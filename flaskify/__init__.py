@@ -11,4 +11,15 @@ def create_app(config="config.development"):
     db.app = app
     db.init_app(app)
 
+    blueprints(app)
+
     return app
+
+
+def blueprints(app):
+    from flaskify.views.song import songs_blueprint
+    from flaskify.views.album import album_blueprint
+    from flaskify.views.artist import artist_blueprint
+    app.register_blueprint(songs_blueprint, url_prefix='/songs')
+    app.register_blueprint(album_blueprint, url_prefix='/albums')
+    app.register_blueprint(artist_blueprint, url_prefix='/artists')

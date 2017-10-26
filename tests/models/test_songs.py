@@ -1,8 +1,10 @@
 import pytest
 from time import sleep
 import datetime
+from flask import url_for
 from flaskify.models.songs import Song
 from flaskify.models.artists import Artist
+from flaskify.models.albums import Album
 
 
 def test_song_can_save_song(db):
@@ -83,3 +85,34 @@ def test_can_add_multiple_artists_to_a_song(db):
 
     for artist in song.artists:
         assert artist.name in ["Artist One", "Artist Two"]
+
+
+def test_serialise(db):
+    song = Song(title="Song title", path="song/path.mp3")
+    song.artists.append(Artist(name="Artist name"))
+    song.albums.append(Album(title="Album title"))
+    db.session.add(song)
+    db.session.commit()
+
+    assert {
+        'id': song.id,
+        'title': song.title,
+        'last_updated': song.last_updated,
+        'url': url_for('songs.song', id=song.id),
+        'artists': [
+            {
+                'id': artist.id,
+                'name': artist.name,
+                'url': url_for('artists.artist', id=song.id)
+            }
+            for artist in song.artists
+        ],
+        'albums': [
+            {
+                'id': album.id,
+                'title': album.title,
+                'url': url_for('albums.album', id=song.id)
+            }
+            for album in song.albums
+        ]
+    } == song.serialise()

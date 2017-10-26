@@ -1,4 +1,5 @@
 import datetime
+from flask import url_for
 from sqlalchemy import event
 from flaskify import db
 
@@ -28,6 +29,30 @@ class Song(db.Model):
         self.path = kwargs.get('path')
         self.last_updated = kwargs.get('last_updated')
 
+    def serialise(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'last_updated': self.last_updated,
+            'url': url_for('songs.song', id=self.id),
+            'artists': [
+                {
+                    'id': artist.id,
+                    'name': artist.name,
+                    'url': url_for('artists.artist', id=self.id)
+                }
+                for artist in self.artists
+            ],
+            'albums': [
+                {
+                    'id': album.id,
+                    'title': album.title,
+                    'url': url_for('albums.album', id=self.id)
+                }
+                for album in self.albums
+            ]
+        }
+
 
 @event.listens_for(Song, 'before_update')
 def before_update_listener(mapper, connection, target):
@@ -41,5 +66,5 @@ class AlbumSong(db.Model):
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), primary_key=True)
     track_no = db.Column('track_no', db.Integer)
 
-    song = db.relationship('Song', backref='album_songs')
-    album = db.relationship('Album', backref='song_albums')
+    song = db.relationship('Song', backref='song_albums')
+    album = db.relationship('Album', backref='album_songs')

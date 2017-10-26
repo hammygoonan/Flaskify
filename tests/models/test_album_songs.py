@@ -32,7 +32,7 @@ def test_can_add_track_number(db):
     db.session.add(album_song)
     db.session.commit()
 
-    assert song.album_songs[0].track_no == 2
-    assert album.song_albums[0].track_no == 2
-    assert song.album_songs[0].album.title == "This is an album"
-    assert album.song_albums[0].song.title == "This is a song"
+    assert song.song_albums[0].track_no == 2
+    assert album.album_songs[0].track_no == 2
+    assert song.song_albums[0].album.title == "This is an album"
+    assert album.album_songs[0].song.title == "This is a song"

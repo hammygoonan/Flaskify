@@ -1,8 +1,11 @@
 import pytest
 import datetime
 from time import sleep
+from flask import url_for
 from flaskify.models.albums import Album
 from flaskify.models.artists import Artist
+from flaskify.models.songs import Song
+from flaskify.models.songs import AlbumSong
 
 
 def test_can_save_album(db):
@@ -71,3 +74,57 @@ def test_can_add_artists_to_albums(db):
     assert "test artist" == artist.name
     assert "test artist" == album.artists[0].name
     assert "test title" == artist.albums[0].title
+
+
+def test_serialise(db):
+    album = Album(title="test title")
+    album.artists.append(Artist(name="Test Artist"))
+    db.session.add(album)
+    db.session.add(
+        AlbumSong(
+            song=Song(title="This is a song title", path="song1/path.mp3"),
+            track_no=1,
+            album=album
+        )
+    )
+    db.session.add(
+        AlbumSong(
+            song=Song(title="Second Song", path="song2/path.mp3"),
+            track_no=2,
+            album=album
+        )
+    )
+    db.session.commit()
+
+    assert {
+        'id': album.id,
+        'title': album.title,
+        'last_updated': album.last_updated,
+        'url': url_for('albums.album', id=album.id),
+        'artists': [
+            {
+                'id': artist.id,
+                'name': artist.name,
+                'url': url_for('artists.artist', id=album.id)
+            }
+            for artist in album.artists
+        ],
+        'songs': [
+            {
+                'id': album_song.song.id,
+                'title': album_song.song.title,
+                'last_updated': album_song.song.last_updated,
+                'url': url_for('songs.song', id=album_song.song.id),
+                'track_no': album_song.track_no,
+                'artists': [
+                    {
+                        'id': artist.id,
+                        'name': artist.name,
+                        'url': url_for('artists.artist', id=album.id)
+                    }
+                    for artist in album_song.song.artists
+                ],
+            }
+            for album_song in album.album_songs
+        ]
+    } == album.serialise()
