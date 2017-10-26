@@ -1,5 +1,9 @@
 # app specific
 config.py
+config/development.py
+config/test.py
+config/production.py
+
 robots.txt
 .sass-cache
 coverage

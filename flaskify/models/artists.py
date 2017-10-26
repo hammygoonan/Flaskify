@@ -1,9 +1,6 @@
-"""Artist Model."""
-
 import datetime
 from sqlalchemy import event
-
-from project import db
+from flaskify import db
 
 
 class Artist(db.Model):
@@ -13,22 +10,11 @@ class Artist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    last_updated = db.Column(db.DateTime)
+    last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, **kwargs):
-        """Initialise Model."""
         self.name = kwargs.get('name')
-        self.last_updated = datetime.datetime.utcnow()
-
-    def serialise(self):
-        return {'name': self.name}
-
-    @staticmethod
-    def get_or_create(name):
-        artist = Artist.query.filter_by(name=name).first()
-        if artist is None:
-            artist = Artist(name)
-        return artist
+        self.last_updated = kwargs.get('last_updated')
 
 
 @event.listens_for(Artist, 'before_update')
