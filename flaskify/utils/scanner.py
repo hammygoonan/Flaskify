@@ -70,19 +70,26 @@ def process_track_data(track):
         return
     album = create_album(album_name)
 
-    album_song = AlbumSong()
-    album_song.song = song
-    album_song.album = album
-    album_song.track_no = track.get_track_number()
-    db.session.add(album_song)
+    track_no = track.get_track_number()
+    album_song = AlbumSong.query.filter_by(song=song, album=album, track_no=track_no)
+    if album_song is None:
+        album_song.song = song
+        album_song.album = album
+        album_song.track_no = track_no
+        db.session.add(album_song)
 
     for artist_name in track.get_artists():
         artist = create_artist(artist_name)
         song.artists.append(artist)
 
-    for artist_name in track.get_album_artists():
-        artist = create_artist(artist_name)
+    album_artist = track.get_album_artists()
+
+    if album_artist is None:
         album.artists.append(artist)
+    else:
+        for artist_name in album_artist:
+            artist = create_artist(artist_name)
+            album.artists.append(artist)
 
     db.session.commit()
 
