@@ -30,10 +30,10 @@ We recommend creating a system link from a Music directory elsewhere.
 
 
 # TODO:
-- [ ] Improve test coverage of model relationships
-- [ ] API
-- [ ] Better serialisation
+- [x] Improve test coverage of model relationships
+- [x] API
+- [x] Better serialisation
 - [ ] Guess song artist and name if no metadata
 - [ ] Cover art
-- [ ] Pagination
+- [x] Pagination
 - [ ] Playlists

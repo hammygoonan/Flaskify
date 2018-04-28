@@ -39,9 +39,10 @@ def albums():
     return jsonify(data)
 
 
-@album_blueprint.route('/<int:id>/artwork')
+@album_blueprint.route('/<int:id>/artwork/')
 def album_artwork(id):
     album = Album.query.get(id)
+    print(album)
     if album:
         @stream_with_context
         def generate():

@@ -13,6 +13,9 @@ from flaskify.models.songs import AlbumSong
 from flaskify.models.songs import Song
 
 
+EXTENTIONS = ['.mp3', '.mp4', '.m4a', 'flac', '.ogg']
+
+
 def scan_dir(directory=None):
     """Scan a direcotry and it's sub directories for music files."""
     if directory is None:
@@ -22,9 +25,10 @@ def scan_dir(directory=None):
     for path, directories, files in os.walk(directory):
         if ignore_directory(path, directories, files):
             for f in files:
-                track = get_track_details(os.path.join(path, f))
-                if track:
-                    process_track_data(track)
+                if f[-4:] in EXTENTIONS:
+                    track = get_track_details(os.path.join(path, f))
+                    if track:
+                        process_track_data(track)
 
 
 def ignore_directory(path, directories, files):
@@ -35,7 +39,7 @@ def ignore_directory(path, directories, files):
         return False
 
     for song in files:
-        if song[-4:] in ['.mp3', '.mp4', '.m4a', 'flac', '.ogg']:
+        if song[-4:] in EXTENTIONS:
             return True
 
     return False
