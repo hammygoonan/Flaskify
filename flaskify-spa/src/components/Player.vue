@@ -21,9 +21,6 @@ export default {
       .then((response) => {
         this.src = `${process.env.API_URL.slice(0, -1)}${response.data.src}`;
         this.title = response.data.title;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   },
 };

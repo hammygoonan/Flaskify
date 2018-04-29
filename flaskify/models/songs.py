@@ -37,7 +37,8 @@ class Song(db.Model):
             'last_updated': self.last_updated,
             'url': url_for('songs.song', id=self.id),
             'src': url_for(
-                'songs.song_file', filename=self.path.replace(current_app.config['MUSIC_DIR'], '')[1:]
+                'songs.song_file',
+                filename=self.path.replace(current_app.config['MUSIC_DIR'], '')[1:]
             ),
             'artists': [
                 {
