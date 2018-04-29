@@ -3,6 +3,8 @@ from flask import jsonify
 from flask import abort
 from flask import request
 from flask import url_for
+from flask import send_from_directory
+from flask import current_app
 
 from flaskify.models.songs import Song
 
@@ -35,6 +37,8 @@ def songs():
         data['next_page'] = url_for('songs.songs', p=songs.prev_num)
     return jsonify(data)
 
-# /songs/<id>/artists
-# /songs/<id>/albums
-# pagination
+
+@songs_blueprint.route('/song_file/<path:filename>/')
+def song_file(filename):
+    # print(send_from_directory(current_app.config['MUSIC_DIR'][:-1], filename))
+    return send_from_directory('static/music', filename)
