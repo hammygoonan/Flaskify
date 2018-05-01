@@ -1,5 +1,6 @@
 import datetime
 from flask import url_for
+from flask import current_app
 from sqlalchemy import event
 from flaskify import db
 
@@ -48,6 +49,11 @@ class Album(db.Model):
                     'last_updated': album_song.song.last_updated,
                     'url': url_for('songs.song', id=album_song.song.id),
                     'track_no': album_song.track_no,
+                    'src': url_for(
+                        'songs.song_file',
+                        filename=album_song.song.path.replace(
+                            current_app.config['MUSIC_DIR'], '')[1:]
+                    ),
                     'artists': [
                         {
                             'id': artist.id,

@@ -24,7 +24,7 @@ def album(id):
 @album_blueprint.route('/')
 def albums():
     page = request.args.get('p', 1)
-    albums = Album.query.paginate(page=int(page), per_page=500)
+    albums = Album.query.paginate(page=int(page), per_page=50)
     data = {
         'collection': [album.serialise() for album in albums.items],
         'page': albums.page,

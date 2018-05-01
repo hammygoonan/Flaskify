@@ -1,27 +1,41 @@
 <template lang="html">
   <div class="player">
-    <audio controls="true" :src="src">{{ title }}</audio>
+    <audio
+      :src="src"
+      autoplay
+      controls
+      @ended="ended"
+      @timeupdate="timeupdate"
+    >{{ song.title }}</audio>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'player',
-  props: ['song_id'],
   data() {
     return {
-      src: '',
-      title: '',
+      currentTime: 0,
     };
   },
-  mounted() {
-    axios.get(`${process.env.API_URL}songs/${this.song_id}/`)
-      .then((response) => {
-        this.src = `${process.env.API_URL.slice(0, -1)}${response.data.src}`;
-        this.title = response.data.title;
-      });
+  computed: {
+    song() {
+      return this.$store.state.playing;
+    },
+    src() {
+      if (Object.keys(this.$store.state.playing).length === 0) {
+        return '';
+      }
+      return `${process.env.API_URL.slice(0, -1)}${this.$store.state.playing.src}`;
+    },
+  },
+  methods: {
+    ended() {
+      console.log('test');
+    },
+    timeupdate(a) {
+      this.currentTime = a.target.currentTime / a.target.duration;
+    },
   },
 };
 </script>

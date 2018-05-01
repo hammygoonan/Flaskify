@@ -54,7 +54,7 @@ def get_track_details(path):
     track = None
     try:
         track = Track.get_details(path)
-    except:
+    except Exception:
         print('Error opening {}'.format(path))
     return track
 
