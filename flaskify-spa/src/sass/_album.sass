@@ -1,4 +1,32 @@
 .album-square
-  height: 100%
+  background-position: center
+  background-repeat: no-repeat
+  background-size: cover
   position: relative
   width: 100%
+
+  &::after
+    content: ''
+    display: block
+    padding-bottom: 100%
+
+.album-square__info
+  background-color: $background-black
+  bottom: 0
+  color: $white
+  font-size: $size-small
+  left: 0
+  padding: $size-7
+  position: absolute
+  right: 0
+
+  h5
+    cursor: pointer
+    font-weight: 600
+
+.album-square__song-list
+  left: 0
+  position: absolute
+  top: 100%
+  width: 100%
+  z-index: 10

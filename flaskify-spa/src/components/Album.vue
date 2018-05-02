@@ -1,8 +1,10 @@
 <template>
-  <div class="album-square" :style="colour">
-    <strong @click="display = !display">{{ data.title }}</strong><br />
-    <span v-for="artist in data.artists" :key="artist.id">{{ artist.name }}</span>
-    <div class="album-square__song-list" v-if="display">
+  <div class="album-square box" :style="background">
+    <div class="album-square__info">
+      <h5 @click="display = !display">{{ data.title }}</h5>
+      <span v-for="artist in data.artists" :key="artist.id">{{ artist.name }}</span>
+    </div>
+    <div class="album-square__song-list box" v-if="display">
       <div>Play all</div>
       <hr />
       <song v-for="song in data.songs" :data="song" :key="song.id"></song>
@@ -24,8 +26,8 @@ export default {
   },
   components: { Song },
   computed: {
-    colour() {
-      return `background-color: #${Math.floor(Math.random() * 16777215).toString(16)}`;
+    background() {
+      return `background-image: url('${process.env.API_URL}albums/${this.data.id}/artwork/');`;
     },
   },
 };

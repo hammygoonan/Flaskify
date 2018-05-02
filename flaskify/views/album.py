@@ -1,13 +1,15 @@
+"""Album views.
+
+:copyright: (c) 2018 Hammy Goonan
+"""
+import io
 from flask import Blueprint
 from flask import jsonify
 from flask import abort
-from flask import stream_with_context
-from flask import Response
 from flask import request
 from flask import url_for
+from flask import send_file
 from flaskify.models.albums import Album
-from mutagen.mp3 import MP3
-import base64
 
 
 album_blueprint = Blueprint('albums', __name__)
@@ -15,6 +17,7 @@ album_blueprint = Blueprint('albums', __name__)
 
 @album_blueprint.route('/<int:id>/')
 def album(id):
+    """Return album resource."""
     album = Album.query.get(id)
     if album:
         return jsonify(album.serialise())
@@ -23,6 +26,7 @@ def album(id):
 
 @album_blueprint.route('/')
 def albums():
+    """Return collection of albums."""
     page = request.args.get('p', 1)
     albums = Album.query.paginate(page=int(page), per_page=50)
     data = {
@@ -41,17 +45,10 @@ def albums():
 
 @album_blueprint.route('/<int:id>/artwork/')
 def album_artwork(id):
+    """Return album artwork."""
     album = Album.query.get(id)
-    print(album)
-    if album:
-        @stream_with_context
-        def generate():
-            mp3 = MP3(album.songs[0].path)
-            art = mp3.get('APIC')
-            print(art)
-            yield base64.b64encode(art)
-        return Response(generate())
+    if album and album.album_art:
+        return send_file(io.BytesIO(album.album_art),
+                         attachment_filename='album.jpeg',
+                         mimetype='image/jpeg')
     abort(404)
-
-# /albums/<id>/songs
-# /albums/<id>/artists

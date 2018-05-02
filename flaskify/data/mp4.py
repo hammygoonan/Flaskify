@@ -37,6 +37,7 @@ class Mp4(Track):
         return int(date.strftime('%Y'))
 
     def get_album_pic(self):
+        return None
         return self.data.get('covr')
 
     def get_track_album(self):

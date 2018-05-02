@@ -1,3 +1,8 @@
+"""Album models.
+
+:copyright: (c) 2018 Hammy Goonan
+"""
+
 import datetime
 from flask import url_for
 from flask import current_app
@@ -13,22 +18,35 @@ album_artists = db.Table(
 
 
 class Album(db.Model):
-    """Song Album."""
+    """Representation of an Album."""
 
     __tablename__ = 'albums'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
+    album_art = db.Column(db.Binary())
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     artists = db.relationship('Artist', secondary='album_artists', backref='albums')
     songs = db.relationship('Song', secondary='album_songs')
 
     def __init__(self, **kwargs):
+        """Initialise :class:`Album`.
+
+        :param title: Album title
+        :param album_art: Byte representation of album art
+        :param last_updated: Date album was last updated
+        """
         self.title = kwargs.get('title')
+        self.album_art = kwargs.get('album_art')
         self.last_updated = kwargs.get('last_updated')
 
     def serialise(self):
+        """Serialise representation of class.
+
+        :return: dictionary of album.
+        :rtype: dict
+        """
         return {
             'id': self.id,
             'title': self.title,
@@ -70,4 +88,5 @@ class Album(db.Model):
 
 @event.listens_for(Album, 'before_update')
 def before_update_listener(mapper, connection, target):
+    """Update :class:`Album`'s `last_updated` field via listener."""
     target.last_updated = datetime.datetime.utcnow()

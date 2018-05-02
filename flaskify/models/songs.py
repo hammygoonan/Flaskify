@@ -25,7 +25,6 @@ class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     path = db.Column(db.String(255), nullable=False, unique=True)
-    album_art = db.Column(db.Text())
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     artists = db.relationship('Artist', secondary=song_artists, backref='songs')
