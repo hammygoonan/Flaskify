@@ -69,17 +69,16 @@ def process_track_data(track):
     if not track_name:
         return None
     song = create_song(track_name, track.get_file_path())
+    # song.album_art = track.get_album_pic()
     album_name = track.get_track_album()
     if not album_name:
         return
     album = create_album(album_name)
 
     track_no = track.get_track_number()
-    album_song = AlbumSong.query.filter_by(song=song, album=album, track_no=track_no)
+    album_song = AlbumSong.query.filter_by(song=song, album=album, track_no=track_no).first()
     if album_song is None:
-        album_song.song = song
-        album_song.album = album
-        album_song.track_no = track_no
+        album_song = AlbumSong(song=song, album=album, track_no=track_no)
         db.session.add(album_song)
 
     for artist_name in track.get_artists():

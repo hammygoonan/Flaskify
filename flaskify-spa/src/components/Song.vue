@@ -11,7 +11,7 @@ export default {
   methods: {
     addSong() {
       this.$store.commit('addToPlaylist', this.data);
-      this.$store.commit('playSong', this.data);
+      // this.$store.commit('playSong', this.data);
     },
   },
 };

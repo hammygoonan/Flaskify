@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     ended() {
-      console.log('test');
+      this.$store.commit('nextSong');
     },
     timeupdate(a) {
       this.currentTime = a.target.currentTime / a.target.duration;
