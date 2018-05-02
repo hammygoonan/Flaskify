@@ -13,7 +13,7 @@ export default new Vuex.Store({
     addToPlaylist(state, song) {
       state.playlist.push(song);
       if (Object.keys(state.playing).length === 0) {
-        state.playing = state.playlist.pop();
+        state.playing = state.playlist.shift();
       }
     },
     playSong(state, song) {
@@ -21,8 +21,7 @@ export default new Vuex.Store({
     },
     nextSong(state) {
       if (state.playlist.length > 0) {
-        console.log('nextSong');
-        state.playing = state.playlist.pop();
+        state.playing = state.playlist.shift();
       }
     },
   },
