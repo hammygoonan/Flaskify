@@ -5,7 +5,7 @@
       <span v-for="artist in data.artists" :key="artist.id">{{ artist.name }}</span>
     </div>
     <div class="album-square__song-list box" v-if="display">
-      <div>Play all</div>
+      <button class="is-link" @click="addAlbum">Play all</button>
       <hr />
       <song v-for="song in data.songs" :data="song" :key="song.id"></song>
     </div>
@@ -28,6 +28,13 @@ export default {
   computed: {
     background() {
       return `background-image: url('${process.env.API_URL}albums/${this.data.id}/artwork/');`;
+    },
+  },
+  methods: {
+    addAlbum() {
+      this.data.songs.forEach((song) => {
+        this.$store.commit('addToPlaylist', song);
+      });
     },
   },
 };

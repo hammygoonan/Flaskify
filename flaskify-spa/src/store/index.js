@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     playlist: [],
     playing: {},
+    page: 1,
   },
   mutations: {
     addToPlaylist(state, song) {

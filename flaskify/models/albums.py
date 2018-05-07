@@ -81,9 +81,20 @@ class Album(db.Model):
                         for artist in album_song.song.artists
                     ],
                 }
-                for album_song in self.album_songs
+                for album_song in sorted(
+                    self.album_songs, key=lambda k: track_number_int(k.track_no)
+                )
             ]
         }
+
+
+def track_number_int(track_no):
+    if track_no is None:
+        return 0
+    try:
+        return int(track_no)
+    except ValueError:
+        return int(track_no.split('/')[0])
 
 
 @event.listens_for(Album, 'before_update')

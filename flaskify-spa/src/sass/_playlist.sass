@@ -1,0 +1,27 @@
+.playlist
+  background-color: $light
+  border-bottom: 1px solid $grey-light
+  border-bottom-left-radius: $radius-large
+  border-left: 1px solid $grey-light
+  padding: $size-5
+  position: fixed
+  right: 0
+  width: 300px
+
+  &.is-active
+    display: block
+
+.delete
+  background-color: transparent
+  position: absolute
+  right: $size-7
+  top: $size-7
+
+  &::before
+    background-color: $grey
+
+  &::after
+    background-color: $grey
+
+  &:hover
+    background-color: transparent
