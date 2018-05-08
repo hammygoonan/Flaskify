@@ -3,13 +3,21 @@
   border-bottom: 1px solid $grey-light
   border-bottom-left-radius: $radius-large
   border-left: 1px solid $grey-light
+  max-height: 100%
+  max-width: 500px
+  overflow-y: auto
   padding: $size-5
   position: fixed
   right: 0
-  width: 300px
+  width: 100%
 
   &.is-active
     display: block
+
+  li
+    color: $black
+    cursor: pointer
+    position: relative
 
 .delete
   background-color: transparent
@@ -25,3 +33,6 @@
 
   &:hover
     background-color: transparent
+
+.plist-delete
+  top: .25rem

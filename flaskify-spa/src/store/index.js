@@ -25,5 +25,11 @@ export default new Vuex.Store({
         state.playing = state.playlist.shift();
       }
     },
+    reorder(state, value) {
+      state.playlist = value;
+    },
+    deleteSong(state, idx) {
+      state.playlist.splice(idx, 1);
+    },
   },
 });

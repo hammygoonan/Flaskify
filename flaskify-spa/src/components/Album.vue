@@ -5,7 +5,7 @@
       <span v-for="artist in data.artists" :key="artist.id">{{ artist.name }}</span>
     </div>
     <div class="album-square__song-list box" v-if="display">
-      <button class="is-link" @click="addAlbum">Play all</button>
+      <button class="is-outlined is-small is-info button" @click="addAlbum">Play all</button>
       <hr />
       <song v-for="song in data.songs" :data="song" :key="song.id"></song>
     </div>
