@@ -23,6 +23,8 @@ export default new Vuex.Store({
     nextSong(state) {
       if (state.playlist.length > 0) {
         state.playing = state.playlist.shift();
+      } else {
+        state.playing = {};
       }
     },
     reorder(state, value) {

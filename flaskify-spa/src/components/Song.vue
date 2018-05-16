@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="song">
-    <a @click="addSong">{{ data.title }}</a>
+    <a @click="addSong" class="is-small">
+      {{ data.title }} - <strong>{{ artists(data.artists) }}</strong>
+    </a>
   </div>
 </template>
 
@@ -12,6 +14,9 @@ export default {
     addSong() {
       this.$store.commit('addToPlaylist', this.data);
       // this.$store.commit('playSong', this.data);
+    },
+    artists(artists) {
+      return artists.reduce((artistList, artist) => artistList + artist.name, '');
     },
   },
 };

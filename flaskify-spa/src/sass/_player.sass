@@ -1,7 +1,53 @@
-audio
+.player
   background-color: $primary
+  border-top: 1px solid $grey
   bottom: 0
   color: $white
+  height: 168px
   left: 0
+  padding: 0
   position: fixed
   width: 100%
+
+  progress
+    margin-bottom: auto
+    margin-top: auto
+
+  img
+    float: right
+    height: 168px
+
+.play
+  border-radius: $size-1
+  font-size: $size-5
+
+  .icon
+    height: auto
+    padding: $size-5
+    width: auto
+
+.next
+  border-radius: $size-3
+
+  .icon
+    height: auto
+    padding: $size-7
+    width: auto
+
+.audio-controls
+  margin: auto
+  padding: $size-3
+
+.audio-control
+  background-color: $white
+  border: 1px solid $grey
+  cursor: pointer
+  padding: 0
+
+  &:hover
+    background-color: $grey
+    color: $white
+
+.player-detail
+  margin-bottom: auto
+  margin-top: auto

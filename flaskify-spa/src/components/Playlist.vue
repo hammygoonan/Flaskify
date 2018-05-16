@@ -1,7 +1,7 @@
 <template lang="html">
   <nav class="navbar is-warning is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <h1 class="title is-4 is-marginless"><a>Flaskify</a></h1>
+      <h1 class="title is-4 logo is-marginless">Flaskify</h1>
       <a role="button"
         class="navbar-burger"
         :class="{ 'is-active': display }"
