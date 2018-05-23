@@ -8,6 +8,7 @@ from flask import url_for
 from flask import current_app
 from sqlalchemy import event
 from flaskify import db
+from .search_mixin import SearchableMixin
 
 
 song_artists = db.Table(
@@ -17,10 +18,12 @@ song_artists = db.Table(
 )
 
 
-class Song(db.Model):
+class Song(SearchableMixin, db.Model):
     """Representation of a Song."""
 
     __tablename__ = 'songs'
+
+    __searchable__ = ['title', 'artist_names', 'album_names']
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -40,6 +43,16 @@ class Song(db.Model):
         self.title = kwargs.get('title')
         self.path = kwargs.get('path')
         self.last_updated = kwargs.get('last_updated')
+
+    @property
+    def artist_names(self):
+        """Return artist names as a string."""
+        return ', '.join([artist.name for artist in self. artists])
+
+    @property
+    def album_names(self):
+        """Return album titles."""
+        return ','.join([album.title for album in self.albums])
 
     def serialise(self):
         """Serialise representation of class.
