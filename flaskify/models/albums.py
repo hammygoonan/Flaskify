@@ -91,10 +91,16 @@ class Album(db.Model):
 def track_number_int(track_no):
     if track_no is None:
         return 0
+    if type(track_no) == int:
+        return track_no
+    if '/' in track_no:
+        return int(track_no.split('/')[0])
+    if '-' in track_no:
+        return int(track_no.split('-')[0])
     try:
         return int(track_no)
     except ValueError:
-        return int(track_no.split('/')[0])
+        return 0
 
 
 @event.listens_for(Album, 'before_update')

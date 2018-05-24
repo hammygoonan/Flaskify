@@ -28,7 +28,7 @@ def album(id):
 def albums():
     """Return collection of albums."""
     page = request.args.get('p', 1)
-    albums = Album.query.paginate(page=int(page), per_page=50)
+    albums = Album.query.order_by('title').paginate(page=int(page), per_page=50)
     data = {
         'collection': [album.serialise() for album in albums.items],
         'page': albums.page,
@@ -51,4 +51,5 @@ def album_artwork(id):
         return send_file(io.BytesIO(album.album_art),
                          attachment_filename='album.jpeg',
                          mimetype='image/jpeg')
+
     abort(404)
