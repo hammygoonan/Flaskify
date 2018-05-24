@@ -8,14 +8,7 @@
           @keyup="sendSearch"
           placeholder="Song, Album or Artist" />
         <div class="results">
-          <ul>
-            <li v-for="result in results" :key="result.id">
-              <a @click="addSong(result)" class="is-small">{{ result.title }}</a> -
-              <span class="artist" v-if="result.artists && result.artists.length > 0">
-                {{ result.artists[0].name }}
-              </span>
-            </li>
-          </ul>
+          <song :data="result" v-for="result in results" :key="result.id"></song>
         </div>
       </div>
     </div>
@@ -25,6 +18,7 @@
 
 <script>
 import axios from 'axios';
+import Song from '@/components/Song';
 
 export default {
   name: 'search',
@@ -34,6 +28,7 @@ export default {
       results: [],
     };
   },
+  components: { Song },
   methods: {
     sendSearch() {
       if (this.searchQuery.length < 3) {
@@ -44,9 +39,6 @@ export default {
             this.results = response.data.collection;
           });
       }
-    },
-    addSong(song) {
-      this.$store.commit('addToPlaylist', song);
     },
   },
 };

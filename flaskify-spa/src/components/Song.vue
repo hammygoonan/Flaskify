@@ -1,7 +1,8 @@
 <template lang="html">
   <div class="song">
     <a @click="addSong" class="is-small">
-      {{ data.title }} - <strong>{{ artists(data.artists) }}</strong>
+      {{ data.title }}
+      <span class="artist"> - {{ artists(data.artists) }}</span>
     </a>
   </div>
 </template>

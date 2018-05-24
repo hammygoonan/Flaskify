@@ -7,14 +7,13 @@
         :class="{ 'is-active': display }"
         aria-label="menu"
         aria-expanded="false"
-        @click="display = true"
+        @click="display = !display"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
       <div class="playlist" v-if="display">
-        <button class="delete" aria-label="close" @click="display = false"></button>
         <search></search>
         <h3 class="title is-6">Playlist</h3>
         <ul>
