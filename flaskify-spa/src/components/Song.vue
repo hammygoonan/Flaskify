@@ -13,7 +13,6 @@ export default {
   methods: {
     addSong() {
       this.$store.commit('addToPlaylist', this.data);
-      // this.$store.commit('playSong', this.data);
     },
     artists(artists) {
       return artists.reduce((artistList, artist) => artistList + artist.name, '');

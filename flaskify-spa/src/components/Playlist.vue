@@ -15,6 +15,7 @@
       </a>
       <div class="playlist" v-if="display">
         <button class="delete" aria-label="close" @click="display = false"></button>
+        <search></search>
         <h3 class="title is-6">Playlist</h3>
         <ul>
           <draggable v-model="songs" :options="{draggable:'li'}">
@@ -34,6 +35,7 @@
 
 <script>
 import draggable from 'vuedraggable';
+import Search from '@/components/Search';
 
 export default {
   name: 'playlist',
@@ -42,7 +44,7 @@ export default {
       display: false,
     };
   },
-  components: { draggable },
+  components: { draggable, Search },
   computed: {
     songs: {
       get() {
