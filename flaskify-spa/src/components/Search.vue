@@ -7,10 +7,10 @@
           class="input"
           @keyup="sendSearch"
           placeholder="Song, Album or Artist" />
-        <div class="results">
-          <song :data="result" v-for="result in results" :key="result.id"></song>
-        </div>
       </div>
+    </div>
+    <div class="results">
+      <song :data="result" v-for="result in results" :key="result.id"></song>
     </div>
   </div>
 

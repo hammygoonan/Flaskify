@@ -23,7 +23,7 @@
               :key="idx"
               draggable="true"
               style="position: relative"
-            >{{ song.title }} - <strong>{{ artists(song.artists) }}</strong>
+            >{{ song.title }}<br /><strong><small>{{ artists(song.artists) }}</small></strong>
             <button class="delete is-small plist-delete" @click="deleteSong(idx)"></button></li>
           </draggable>
         </ul>

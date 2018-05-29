@@ -56,6 +56,9 @@ class Mp3(Track):
         artist = self.data.get('TPE2')
         if artist:
             return artist.text
+        artist = self.get_artists()
+        if artist:
+            return artist.text
         return []
 
     def get_album_year(self):
